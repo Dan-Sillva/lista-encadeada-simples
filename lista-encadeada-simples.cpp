@@ -8,6 +8,15 @@ A lista deve armazenar valores referentes ao pagamento de uma conta, com dia, m�
 Forma de entrega: Link para o repositório do Github
 */
 
+/*Criadores do projeto:
+
+    -Danilo Araujo Silva - 2011454
+    -Eduardo Marconi Araujo Silva - 2011411
+    -José Antônio de Andrade Siqueira - 2010072
+    -Pedro Rodrigues Augusto da Silva - 2010151
+    -Armando José Oliveira - 2010018
+*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
@@ -67,14 +76,17 @@ int main () {
     addBillToList(bill4, list, 2);
     addBillToList(bill5, list, 2);
     addBillToList(bill6, list, 2);
-    addBillToList(bill7, list, 2); 
+    addBillToList(bill7, list, 3, 3); 
     
 
     //functions area  
 
-    printf("----------\n\n");
+    printf("---Search-------\n\n");
     searchList("22/04/2006", list, 1);
-    printf("----------\n\n");
+    searchList("34.94", list, 2);
+    printf("--\n");
+    searchList("true", list, 3);
+    printf("\n----------------\n\n");
 
     printList(list);
 
@@ -146,7 +158,7 @@ void addBillToList(Bill *bill, List *list, int insertOption, int index){
             Bill *auxBill = list->startingPointList;
             int cont = 1;
 
-            while(cont < index && auxBill->next != NULL){
+            while(cont < (index--) && auxBill->next != NULL){
                 auxBill = auxBill->next;
                 cont++;
             }
@@ -231,7 +243,7 @@ void removeBillToList(List *list, int removeOption, int index){
     
 }
 
-Bill *searchList (char search[11], List *list, int searchOption){
+Bill *searchList (char search[11], List *list, int searchOption){ 
     /* searchoption:
         1-date
         2-value
@@ -243,10 +255,11 @@ Bill *searchList (char search[11], List *list, int searchOption){
     case 1:
         {
             for(int n=1; n<=list->index; n++){
-                if(auxBill->date == search){
+                if(strcmp(auxBill->date, search) == 0){
                     printBill(auxBill);
                 };
                 auxBill = auxBill->next;
+                
             };
         }
 
