@@ -305,6 +305,7 @@ bool ArrayToBool(char str[]){
     if (str == "true") {return true;} else if (str == "false") {return false;};
 };
 
+
 /* \\\\\\\\\\---> insert Option :
 
 _1 = inicio da lista
