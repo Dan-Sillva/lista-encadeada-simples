@@ -1,4 +1,4 @@
-/*
+    /*
 Implementar uma lista encadeada simples, com operações de inserção e remoção no início, meio e fim da fila, 
 além de busca de elementos.
 
@@ -16,6 +16,7 @@ typedef struct bill Bill;
 
 //---> types
 typedef struct List {
+    int index;
     Bill *startingPointList;
 };
 
@@ -39,13 +40,48 @@ void removeBillToList(List *list, int removeOption, int index);
 
 Bill *searchList (char search[11], List *list, int searchOption);
 
-int main () {
+void printBill(Bill *bill);
+void printList(List *list);
 
+bool ArrayToBool(char str[]);
+
+
+int main () {
     // Code
+
+    
+    List *list = (List *)malloc(sizeof(List));
+    createEmptyList(list);
+
+    Bill *bill1 = createBill("22/04/2002", 34.99, true);
+    Bill *bill2 = createBill("22/04/2003", 76.71, false);
+    Bill *bill3 = createBill("22/04/2004", 32.69, true);
+    Bill *bill4 = createBill("22/04/2005", 74.73, false);
+    Bill *bill5 = createBill("22/04/2006", 79.77, true);
+    Bill *bill6 = createBill("22/04/2007", 34.94, false);
+    Bill *bill7 = createBill("22/04/2008", 74.74, true);
+
+    addBillToList(bill1, list, 2);
+    addBillToList(bill2, list, 2);
+    addBillToList(bill3, list, 2);
+    addBillToList(bill4, list, 2);
+    addBillToList(bill5, list, 2);
+    addBillToList(bill6, list, 2);
+    addBillToList(bill7, list, 2); 
+    
+
+    //functions area  
+
+    printf("----------\n\n");
+    searchList("22/04/2006", list, 1);
+    printf("----------\n\n");
+
+    printList(list);
 
 };
 
 void createEmptyList(List *list){
+    list->index = 0;
     list->startingPointList = NULL;  
 };
 
@@ -74,7 +110,7 @@ void addBillToList(Bill *bill, List *list, int insertOption) {
             list->startingPointList = bill;
 
         }
-
+        list->index++;
         break;
     
     case 2:
@@ -89,7 +125,7 @@ void addBillToList(Bill *bill, List *list, int insertOption) {
             auxBill->next = bill;
 
         }
-        
+        list->index++;
         break;
     
     default:
@@ -118,6 +154,7 @@ void addBillToList(Bill *bill, List *list, int insertOption, int index){
             bill->next = auxBill->next;
             auxBill->next = bill;
         }
+        list->index++;
 
     } else {
         printf("The selected option do not exist !");
@@ -147,7 +184,7 @@ void removeBillToList(List *list, int removeOption) {
             Bill *auxBill = list->startingPointList;
 
             if(auxBill->next == NULL){
-                printf("Removendo item unico...");
+                printf("Removing..");
                 list->startingPointList = NULL;
 
             } else {
@@ -165,15 +202,108 @@ void removeBillToList(List *list, int removeOption) {
         break;
     
     default:
+        printf("The selected option do not exist !\n\n");
+    
         break;
     }
 
 }
 
-void removeBillToList(List *list, int searchOption, int index){
+void removeBillToList(List *list, int removeOption, int index){
+    if (removeOption == 3) {
+        Bill *prevBill = list->startingPointList;
 
+        if(prevBill->next == NULL){
+            printf("removing...");
+            prevBill = NULL;
+        } else {
+            Bill *auxBill = list->startingPointList;
+            for(int n=1; n<index; n++){
+                prevBill = auxBill;
+                auxBill = auxBill->next;
+            }
+            prevBill->next = auxBill->next;
+            free(auxBill);
+        }
+    } else {
+        printf("The selected option do not exist !\n\n");
+    }
+    
 }
 
+Bill *searchList (char search[11], List *list, int searchOption){
+    /* searchoption:
+        1-date
+        2-value
+        3-status  */
+    Bill *auxBill = list->startingPointList;
+    
+    switch (searchOption)
+    {
+    case 1:
+        {
+            for(int n=1; n<=list->index; n++){
+                if(auxBill->date == search){
+                    printBill(auxBill);
+                };
+                auxBill = auxBill->next;
+            };
+        }
+
+        break;
+
+    case 2:
+        {
+            for(int n=1; n<=list->index; n++){
+                if(auxBill->value == atof(search)){     //atof = ArrayToFloat
+                    printBill(auxBill);
+                };
+                auxBill = auxBill->next;
+            };
+        }
+
+        break;
+
+    case 3:
+        {   
+            for(int n=1; n<=list->index; n++){
+                if(auxBill->paymentStatus == ArrayToBool(search)){     // convert char array to boolean
+                    printBill(auxBill);
+                };
+                auxBill = auxBill->next;
+            };
+        }  
+
+        break;
+    
+    default:
+        break;
+    }
+
+    return NULL;
+};
+
+void printBill(Bill *bill){
+    printf("[Date : %s ]-[Value : R$%.2f ]-[Status : %6s ]\n", bill->date, bill->value, bill->paymentStatus?"true":"false");
+}
+
+void printList(List *list){
+    Bill *auxBill = list->startingPointList;
+
+    // system("cls");
+    printf("---------------------------////\n\n");
+    for(int n=1; n<=list->index; n++){
+        printBill(auxBill);
+        
+        auxBill = auxBill->next;
+    };
+    printf("\n\n");
+
+};
+
+bool ArrayToBool(char str[]){
+    if (str == "true") {return true;} else if (str == "false") {return false;};
+};
 
 /* \\\\\\\\\\---> insert Option :
 
